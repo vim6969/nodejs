@@ -25,10 +25,11 @@ app.post("/download-reels", async (req, res) => {
   try {
     const browser = await puppeteer.launch({
       executablePath: await chromium.executablePath,
-      args: chromium.args,
+      args: [chromium.args,'--no-sandbox','--disable-setuid-sandbox'],
+      ignoreDefaultArgs:['--disable-extensions'],
       headless: chromium.headless,
     });
-    
+    // 
     const page = await browser.newPage();
     await page.goto(link);
     //wait for the video element to appear on the page
