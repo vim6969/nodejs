@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const axios = require("axios");
 const fs = require("fs");
-// const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const chromium = require("chrome-aws-lambda");
 
 const app = express();
@@ -23,18 +23,12 @@ app.post("/download-reels", async (req, res) => {
   console.log("link received from client:", link);
   //use puppeteer here once the link is received
   try {
-    // const browser = await puppeteer.launch({
-    //   executablePath: await chromium.executablePath,
-    //   args: chromium.args,
-    //   headless: chromium.headless,
-    // });
-    const browser = await chromium.puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-      });
+    const browser = await puppeteer.launch({
+      executablePath: await chromium.executablePath,
+      args: chromium.args,
+      headless: chromium.headless,
+    });
+    
     const page = await browser.newPage();
     await page.goto(link);
     //wait for the video element to appear on the page
